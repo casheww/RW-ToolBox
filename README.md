@@ -8,5 +8,7 @@ This is less noticeable in single screen rooms, but even monk/survivor's 3-scree
 
 ## Controls
 **Hyphen/minus key (`-`)** : creature sprite tagger
+
 **Equals key (`=`)** : body chunk tagger
+
 **Del/Delete Key** : tile mapper - places a square sprite on each Room.Tile in the room

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HeadsShouldersKneesAndToes
 {
-    [BepInPlugin("casheww.chunk_tagger", "Tagger", "1.0")]
+    [BepInPlugin("casheww.chunk_tagger", "Tagger", "1.1")]
     class TaggerMod : BaseUnityPlugin
     {
 

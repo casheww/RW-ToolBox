@@ -52,7 +52,7 @@ namespace HeadsShouldersKneesAndToes
                     rCam.room.AddObject(spriteLabel);
                 }
 
-                if (rCam.room != CurrentTiledRoom)
+                if (rCam.room.abstractRoom.name != CurrentTiledRoomName)
                 {
                     int n = 0;
                     foreach (Room.Tile tile in rCam.room.Tiles)
@@ -62,11 +62,12 @@ namespace HeadsShouldersKneesAndToes
                         n++;
                     }
                     Debug.Log($"grid : {rCam.room.Width}*{rCam.room.Height} = {n}");
+                    CurrentTiledRoomName = rCam.room.abstractRoom.name;
                 }
             }
         }
 
-        public static Room CurrentTiledRoom { get; private set; }
+        public static string CurrentTiledRoomName { get; private set; }
 
         public static bool ChunkTagsVisible { get; private set; }
         public static bool SpriteTagsVisible { get; private set; }

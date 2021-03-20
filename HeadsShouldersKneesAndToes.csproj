@@ -58,7 +58,7 @@
     <Compile Include="SpriteLabel.cs" />
     <Compile Include="TaggerMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TileMarker.cs" />
+    <Compile Include="TileGridLine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

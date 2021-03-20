@@ -54,14 +54,16 @@ namespace HeadsShouldersKneesAndToes
 
                 if (rCam.room.abstractRoom.name != CurrentTiledRoomName)
                 {
-                    int n = 0;
-                    foreach (Room.Tile tile in rCam.room.Tiles)
+                    for (int x = 0; x < rCam.room.Width; x++)
                     {
-                        TileMarker tileMarker = new TileMarker(rCam.room, tile);
+                        TileGridLine tileMarker = new TileGridLine(rCam.room, TileGridLine.Orientation.Vertical, x);
                         rCam.room.AddObject(tileMarker);
-                        n++;
                     }
-                    Debug.Log($"grid : {rCam.room.Width}*{rCam.room.Height} = {n}");
+                    for (int y = 0; y < rCam.room.Height; y++)
+                    {
+                        TileGridLine tileMarker = new TileGridLine(rCam.room, TileGridLine.Orientation.Horizontal, y);
+                        rCam.room.AddObject(tileMarker);
+                    }
                     CurrentTiledRoomName = rCam.room.abstractRoom.name;
                 }
             }

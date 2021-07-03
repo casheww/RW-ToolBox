@@ -7,16 +7,15 @@ namespace HeadsShouldersKneesAndToes
     [BepInPlugin("casheww.chunk_tagger", "Tagger", "1.1")]
     class TaggerMod : BaseUnityPlugin
     {
-
-        void OnEnable()
+        public void OnEnable()
         {
-            On.GraphicsModule.InitiateSprites += GraphicsModule_InitiateSprites;
+            On.RoomCamera.SpriteLeaser.ctor += SpriteLeaser_ctor;
             ChunkTagsVisible = false;
             SpriteTagsVisible = false;
             TileGridVisible = false;
         }
 
-        void Update()
+        public void Update()
         {
             if (Input.GetKeyDown(KeyCode.Equals))
             {
@@ -32,44 +31,47 @@ namespace HeadsShouldersKneesAndToes
             }
         }
 
-        void GraphicsModule_InitiateSprites(On.GraphicsModule.orig_InitiateSprites orig,
-                GraphicsModule self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam)
+        private void SpriteLeaser_ctor(On.RoomCamera.SpriteLeaser.orig_ctor orig, RoomCamera.SpriteLeaser self, IDrawable obj, RoomCamera rCam)
         {
-            orig(self, sLeaser, rCam);
+            orig(self, obj, rCam);
 
-            if (self.owner is Creature)
+            if (!(obj is ChunkLabel || obj is SpriteLabel || obj is TileGridLine))
             {
-                for (int i = 0; i < self.owner.bodyChunks.Length; i++)
+                var physobjs = obj as PhysicalObject ?? (obj is GraphicsModule g ? g.owner : null);
+
+                if (physobjs != null)
                 {
-                    ChunkLabel chunkLabel = new ChunkLabel(self.owner.bodyChunks[i], i, rCam.room);
-                    rCam.room.AddObject(chunkLabel);
+                    for (int i = 0; i < physobjs.bodyChunks.Length; i++)
+                    {
+                        ChunkLabel chunkLabel = new ChunkLabel(physobjs.bodyChunks[i], i);
+                        rCam.room.AddObject(chunkLabel);
+                    }
+                    for (int i = 0; i < self.sprites.Length; i++)
+                    {
+                        SpriteLabel spriteLabel = new SpriteLabel(self.sprites[i], physobjs, i);
+                        rCam.room.AddObject(spriteLabel);
+                    }
                 }
 
-                for (int i = 0; i < sLeaser.sprites.Length; i++)
+                if (rCam.room.abstractRoom.name != CurrentRoomName)
                 {
-                    SpriteLabel spriteLabel = new SpriteLabel(sLeaser.sprites[i],
-                            self.owner as Creature, i, rCam.room);
-                    rCam.room.AddObject(spriteLabel);
-                }
-
-                if (rCam.room.abstractRoom.name != CurrentTiledRoomName)
-                {
-                    for (int x = 0; x < rCam.room.Width; x++)
+                    for (int x = 0; x < rCam.room.TileWidth; x++)
                     {
-                        TileGridLine tileMarker = new TileGridLine(rCam.room, TileGridLine.Orientation.Vertical, x);
+                        TileGridLine tileMarker = new TileGridLine(TileGridLine.Orientation.Vertical, x);
                         rCam.room.AddObject(tileMarker);
                     }
-                    for (int y = 0; y < rCam.room.Height; y++)
+                    for (int y = 0; y < rCam.room.TileHeight; y++)
                     {
-                        TileGridLine tileMarker = new TileGridLine(rCam.room, TileGridLine.Orientation.Horizontal, y);
+                        TileGridLine tileMarker = new TileGridLine(TileGridLine.Orientation.Horizontal, y);
                         rCam.room.AddObject(tileMarker);
                     }
-                    CurrentTiledRoomName = rCam.room.abstractRoom.name;
                 }
             }
+
+            CurrentRoomName = rCam.room.abstractRoom.name;
         }
 
-        public static string CurrentTiledRoomName { get; private set; }
+        public static string CurrentRoomName { get; private set; }
 
         public static bool ChunkTagsVisible { get; private set; }
         public static bool SpriteTagsVisible { get; private set; }

@@ -5,10 +5,9 @@ namespace HeadsShouldersKneesAndToes
 {
     class ChunkLabel : CosmeticSprite
     {
-        public ChunkLabel(BodyChunk chunk, int index, Room room)
+        public ChunkLabel(BodyChunk chunk, int index)
         {
             this.chunk = chunk;
-            startRoomName = room.abstractRoom.name;
 
             // set label text properties
             label = new FLabel("DisplayFont", index.ToString())
@@ -22,14 +21,10 @@ namespace HeadsShouldersKneesAndToes
 
         public override void Update(bool eu)
         {
-            try
+            if (chunk.owner?.room?.abstractRoom?.name != TaggerMod.CurrentRoomName || chunk.owner.slatedForDeletetion)
             {
-                if (chunk.owner.room.abstractRoom.name != startRoomName)
-                {
-                    Destroy();
-                }
+                Destroy();
             }
-            catch (NullReferenceException) { }
 
             base.Update(eu);
         }
@@ -83,6 +78,5 @@ namespace HeadsShouldersKneesAndToes
 
         readonly BodyChunk chunk;
         readonly FLabel label;
-        readonly string startRoomName;
     }
 }

@@ -5,27 +5,21 @@ namespace HeadsShouldersKneesAndToes
 {
     class TileGridLine : CosmeticSprite
     {
-        public TileGridLine(Room room, Orientation o, int n)
+        public TileGridLine(Orientation o, int n)
         {
-            startRoomName = room.abstractRoom.name;
             this.o = o;
             this.n = n;
         }
 
         readonly Orientation o;
         readonly int n;
-        readonly string startRoomName;
 
         public override void Update(bool eu)
         {
-            try
+            if (room.abstractRoom?.name != TaggerMod.CurrentRoomName)
             {
-                if (room.abstractRoom.name != startRoomName)
-                {
-                    Destroy();
-                }
+                Destroy();
             }
-            catch (NullReferenceException) { }
 
             base.Update(eu);
         }
@@ -57,11 +51,11 @@ namespace HeadsShouldersKneesAndToes
             sLeaser.sprites[0].isVisible = TaggerMod.TileGridVisible;
             if (o == Orientation.Vertical)
             {
-                sLeaser.sprites[0].SetPosition(rCam.room.MiddleOfTile(n, rCam.room.Height / 2) - camPos - new Vector2(10, 0));
+                sLeaser.sprites[0].SetPosition(rCam.room.MiddleOfTile(n, rCam.room.TileHeight / 2) - camPos - new Vector2(10, 0));
             }
             else
             {
-                sLeaser.sprites[0].SetPosition(rCam.room.MiddleOfTile(rCam.room.Width / 2, n) - camPos - new Vector2(0, 10));
+                sLeaser.sprites[0].SetPosition(rCam.room.MiddleOfTile(rCam.room.TileWidth / 2, n) - camPos - new Vector2(0, 10));
             }
             base.DrawSprites(sLeaser, rCam, timeStacker, camPos);
         }

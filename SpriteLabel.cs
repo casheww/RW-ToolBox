@@ -5,11 +5,10 @@ namespace HeadsShouldersKneesAndToes
 {
     class SpriteLabel : CosmeticSprite
     {
-        public SpriteLabel(FSprite sprite, Creature owner, int index, Room room)
+        public SpriteLabel(FSprite sprite, UpdatableAndDeletable owner, int index)
         {
             this.sprite = sprite;
             this.owner = owner;
-            startRoomName = room.abstractRoom.name;
 
             // set label text properties
             label = new FLabel("DisplayFont", index.ToString())
@@ -23,14 +22,10 @@ namespace HeadsShouldersKneesAndToes
 
         public override void Update(bool eu)
         {
-            try
+            if (owner.room?.abstractRoom?.name != TaggerMod.CurrentRoomName || owner.slatedForDeletetion)
             {
-                if (owner.room.abstractRoom.name != startRoomName)
-                {
-                    Destroy();
-                }
+                Destroy();
             }
-            catch (NullReferenceException) { }
 
             base.Update(eu);
         }
@@ -85,8 +80,7 @@ namespace HeadsShouldersKneesAndToes
         }
 
         readonly FSprite sprite;
-        readonly Creature owner;
+        readonly UpdatableAndDeletable owner;
         readonly FLabel label;
-        readonly string startRoomName;
     }
 }

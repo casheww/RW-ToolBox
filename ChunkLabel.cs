@@ -5,10 +5,9 @@ namespace HeadsShouldersKneesAndToes
 {
     class ChunkLabel : CosmeticSprite
     {
-        public ChunkLabel(BodyChunk chunk, int index, Room room)
+        public ChunkLabel(BodyChunk chunk, int index)
         {
             this.chunk = chunk;
-            startRoomName = room.abstractRoom.name;
 
             // set label text properties
             label = new FLabel("DisplayFont", index.ToString())
@@ -22,14 +21,10 @@ namespace HeadsShouldersKneesAndToes
 
         public override void Update(bool eu)
         {
-            try
+            if (chunk.owner?.room?.abstractRoom?.name != TaggerMod.CurrentRoomName || chunk.owner.slatedForDeletetion)
             {
-                if (chunk.owner.room.abstractRoom.name != startRoomName)
-                {
-                    Destroy();
-                }
+                Destroy();
             }
-            catch (NullReferenceException) { }
 
             base.Update(eu);
         }
@@ -45,11 +40,7 @@ namespace HeadsShouldersKneesAndToes
         {
             // set label background properties (sans color)
             sLeaser.sprites = new FSprite[1];
-            sLeaser.sprites[0] = new FSprite("pixel", true)
-            {
-                scaleX = 8f,
-                scaleY = 8f
-            };
+            sLeaser.sprites[0] = new FSprite("pixel", true);
             AddToContainer(sLeaser, rCam, null);
         }
 
@@ -57,6 +48,7 @@ namespace HeadsShouldersKneesAndToes
         {
             Vector2 pos = Vector2.Lerp(chunk.lastPos, chunk.pos, timeStacker) - camPos;
             sLeaser.sprites[0].SetPosition(pos);
+            sLeaser.sprites[0].scaleX = sLeaser.sprites[0].scaleY = chunk.rad * 2;
             label.SetPosition(pos);
             sLeaser.sprites[0].isVisible = TaggerMod.ChunkTagsVisible;
             label.isVisible = TaggerMod.ChunkTagsVisible;
@@ -76,13 +68,12 @@ namespace HeadsShouldersKneesAndToes
         public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette)
         {
             // set colour of label background
-            Color color = Color.black;
+            Color color = palette.skyColor * 0.9f;
             color.a = 0.7f;
             sLeaser.sprites[0].color = color;
         }
 
         readonly BodyChunk chunk;
         readonly FLabel label;
-        readonly string startRoomName;
     }
 }

@@ -1,0 +1,10 @@
+﻿{
+  "id": "casheww.physical_object_tools",
+  "name": "Physical Object Tools",
+  "version": "0.3.0",
+  "authors": "casheww",
+  "description": "Adds visual debugging markers for index-labelling PhysicalObjects' sprites and body chunks, tile grids, etc. Contributions from Dual.",
+  "requirements": [],
+  "requirements_names": [],
+  "checksum_override_version": false
+}

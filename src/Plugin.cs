@@ -30,13 +30,17 @@ public sealed class Plugin : BaseUnityPlugin
 
         On.Player.Update += (orig, self, eu) => {
             orig(self, eu);
-            CurrentRoomName = self.room.abstractRoom.name;
+            if (self.room?.abstractRoom != null)
+                CurrentRoomName = self.room.abstractRoom.name;
         };
 
         On.RoomCamera.SpriteLeaser.ctor += SpriteLeaser_ctor;
     }
 
     public void Update() {
+        if (ConfigOI.ChunkKey == null)
+            return;
+
         if (Input.GetKeyDown(ConfigOI.ChunkKey.Value))
             ChunkTagsVisible = !ChunkTagsVisible;
 

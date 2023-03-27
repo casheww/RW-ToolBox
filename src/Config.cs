@@ -24,11 +24,11 @@ public sealed class ConfigOI : OptionInterface {
 
         t.AddItems(
             new OpLabel(75f, 475f, "Chunk key"),
-            new OpKeyBinder(ChunkKey, new Vector2(180f, 475f), new Vector2(50f, 30f)),
+            new OpKeyBinder(ChunkKey, new Vector2(180f, 475f), new Vector2(80f, 30f)),
             new OpLabel(75f, 440f, "Sprite key"),
-            new OpKeyBinder(SpriteKey, new Vector2(180f, 440f), new Vector2(50f, 30f)),
+            new OpKeyBinder(SpriteKey, new Vector2(180f, 440f), new Vector2(80f, 30f)),
             new OpLabel(75f, 405f, "Tile grid key"),
-            new OpKeyBinder(TileGridKey, new Vector2(180f, 405f), new Vector2(50f, 30f))
+            new OpKeyBinder(TileGridKey, new Vector2(180f, 405f), new Vector2(80f, 30f))
         );
     }
 

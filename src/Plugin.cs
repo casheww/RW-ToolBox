@@ -10,7 +10,7 @@ namespace PhysicalObjectTools;
 using DebuggingSprites;
 
 [BepInPlugin("casheww.physical_object_tools", "Physical Object Tools", "0.3.0")]
-sealed class Plugin : BaseUnityPlugin
+public sealed class Plugin : BaseUnityPlugin
 {
     public void OnEnable()
     {
@@ -19,6 +19,13 @@ sealed class Plugin : BaseUnityPlugin
             ChunkTagsVisible = false;
             SpriteTagsVisible = false;
             TileGridVisible = false;
+
+            try {
+                MachineConnector.SetRegisteredOI(Info.Metadata.GUID, new ConfigOI(this));
+            }
+            catch (System.Exception e) {
+                Logger.LogError(e);
+            }
         };
 
         On.Player.Update += (orig, self, eu) => {
@@ -30,13 +37,13 @@ sealed class Plugin : BaseUnityPlugin
     }
 
     public void Update() {
-        if (Input.GetKeyDown(KeyCode.Equals))
+        if (Input.GetKeyDown(ConfigOI.ChunkKey.Value))
             ChunkTagsVisible = !ChunkTagsVisible;
 
-        if (Input.GetKeyDown(KeyCode.Minus))
+        if (Input.GetKeyDown(ConfigOI.SpriteKey.Value))
             SpriteTagsVisible = !SpriteTagsVisible;
 
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKeyDown(ConfigOI.TileGridKey.Value))
             TileGridVisible = !TileGridVisible;
     }
 
